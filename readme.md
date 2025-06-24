@@ -40,7 +40,7 @@ python main.py     # listens to Redis stream and replies using GPT
 cd server
 uvicorn main:api --reload --port 3500
 
-
+---
 
 
 | Endpoint            | Method    | Description                |
@@ -49,6 +49,7 @@ uvicorn main:api --reload --port 3500
 | `/refresh_token`    | GET       | Refreshes session          |
 | `/chat?token=...`   | WebSocket | Two-way communication      |
 
+---
 
 🌍 Environment Variables
 Create a .env file like this:
@@ -59,6 +60,7 @@ Edit
 REDIS_URL=redis://default:YOUR_PASSWORD@YOUR_HOST:PORT
 HF_TOKEN=your_huggingface_api_token
 
+---
 
 🔐 Security Advice
 ✅ Never commit .env files or secrets
@@ -67,6 +69,7 @@ HF_TOKEN=your_huggingface_api_token
 
 ✅ Set CORS if using frontend on a different port
 
+---
 
 🧠 Powered By
 FastAPI
@@ -75,6 +78,7 @@ Redis Streams
 
 Hugging Face or OpenAI
 
+---
 
 
 🪪 License

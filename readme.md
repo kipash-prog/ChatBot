@@ -11,29 +11,6 @@ This is a real-time AI chatbot built using:
 
 ---
 
-## 📁 Folder Structure
-
-
-fullstack-ai-chatbot/
-├── server/ # FastAPI backend
-│ ├── main.py # Entrypoint
-│ ├── src/
-│ │ ├── routes/ # WebSocket + Token APIs
-│ │ ├── redis/ # Redis config, producer, consumer
-│ │ ├── socket/ # WebSocket manager
-│ │ ├── schema/ # Pydantic data models
-│ │ └── model/ # GPT API call
-│
-├── worker/ # Background consumer (calls GPT)
-│ └── main.py
-│
-│
-├── .env.example # Env config example
-├── requirements.txt
-└── README.md
-
-
-
 ---
 
 ## ⚙️ Requirements
@@ -72,6 +49,36 @@ uvicorn main:api --reload --port 3500
 | `/refresh_token`    | GET       | Refreshes session          |
 | `/chat?token=...`   | WebSocket | Two-way communication      |
 
+
+🌍 Environment Variables
+Create a .env file like this:
+
+env
+Copy
+Edit
+REDIS_URL=redis://default:YOUR_PASSWORD@YOUR_HOST:PORT
+HF_TOKEN=your_huggingface_api_token
+
+
+🔐 Security Advice
+✅ Never commit .env files or secrets
+
+✅ Use wss:// and https:// in production
+
+✅ Set CORS if using frontend on a different port
+
+
+🧠 Powered By
+FastAPI
+
+Redis Streams
+
+Hugging Face or OpenAI
+
+
+
+🪪 License
+MIT — for personal use
 
 
 

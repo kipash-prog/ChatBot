@@ -3,43 +3,51 @@ import json
 import requests
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 class GPT:
     def __init__(self):
         self.url = os.environ.get('MODEL_URL')
         self.headers = {
-    "Authorization": f"Bearer {os.environ.get('HUGGINFACE_INFERENCE_TOKEN')}",
-    "Content-Type": "application/json"
-                         }
+            "Authorization": f"Bearer {os.environ.get('HUGGING_FACE_TOKEN')}",
+            "Content-Type": "application/json"
+        }
         self.payload = {
             "inputs": "",
             "parameters": {
                 "return_full_text": False,
                 "use_cache": False,
-                "max_new_tokens": 25
+                "max_new_tokens": 100  # 🔼 increased for longer answers
             }
-
         }
 
     def query(self, input: str) -> str:
-        self.payload["inputs"] = f"Human: {input} Bot:"
+        self.payload["inputs"] = input.strip()
         data = json.dumps(self.payload)
-        response = requests.post(self.url, headers=self.headers, data=data)
-        print("Response Text:", response.text)  # raw response content
 
-        # If response is not JSON, this will help you see why
         try:
-            data = response.json()
-        except Exception as e:
-            print("Error parsing JSON:", e)
-            return None
+            response = requests.post(self.url, headers=self.headers, data=data)
+            print("🔁 Raw response text:", response.text)
 
-        text = data[0]['generated_text']
-        res = str(text.split("Human:")[0]).strip("\n").strip()
-        return res
+            data = response.json()
+
+            # Check for error response
+            if isinstance(data, dict) and "error" in data:
+                print("❌ API Error:", data["error"])
+                return "[Error] HuggingFace API issue"
+
+            # Validate response structure
+            if isinstance(data, list) and "generated_text" in data[0]:
+                return data[0]["generated_text"].strip()
+
+            print("⚠️ Unexpected format:", data)
+            return "[Error] No valid generated_text found"
+
+        except Exception as e:
+            print("🚨 JSON parse error:", e)
+            return "[Error] Failed to parse model response"
 
 
 if __name__ == "__main__":
-    GPT().query("Will artificial intelligence help humanity conquer the universe?")
+    result = GPT().query("Will artificial intelligence help humanity conquer the universe?")
+    print("\n🧠 GPT Output:", result)

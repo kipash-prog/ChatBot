@@ -14,7 +14,7 @@ The repo contains **two async services**:
 
 ```bash
 # clone & cd
-$ git clone <repo>
+$ git clone https://github.com/kipash-prog/ChatBot/
 $ cd fullstack-ai-chatbot
 
 # Python env (3.10+ recommended)
@@ -146,4 +146,4 @@ websocat "ws://localhost:3500/chat?token=$token"
 
 ## 📄 License
 
-MIT © 2025  Your Name
+MIT © 2025  kidus shimelis

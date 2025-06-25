@@ -97,7 +97,7 @@ graph TD
 
 * **Token Route** `POST /token?name=<user>` – returns `{token,name,messages:[]}` (stored as JSON with TTL = 1 h)
 * **WebSocket** `/chat?token=` – validates token, forwards user text to Redis stream `message_channel`, waits on `response_channel`.
-* Add authentication & refresh tokens `GET /token=ENTER TOKEN`, – returns `{token,name,messages:[]}` 
+* **Add authentication & refresh tokens** `GET /token=ENTER TOKEN`, – returns `{token,name,messages:[]}` 
 * **Worker** pulls the stream, calls GPT, publishes response, updates chat history.
 
 ---

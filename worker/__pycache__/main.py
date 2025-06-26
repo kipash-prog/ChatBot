@@ -64,17 +64,7 @@ async def main():
                 prompt = " ".join(msg["msg"] for msg in history)
 
                 # Send to model (run in thread to avoid blocking event loop)
-                raw_response = await asyncio.to_thread(GPT().query, input=prompt)
-
-# If the model returns JSON string (like `[{"generated_text": "..."}]`)
-                try:
-                    parsed_response = json.loads(raw_response)
-                    if isinstance(parsed_response, list) and parsed_response and "generated_text" in parsed_response[0]:
-                        response_text = parsed_response[0]["generated_text"]
-                    else:
-                        response_text = raw_response  # fallback if format unexpected
-                except json.JSONDecodeError:
-                    response_text = raw_response  # fallback if not JSON
+                response_text = await asyncio.to_thread(GPT().query, input=prompt)
 
                 bot_entry = Message(
                     id=str(uuid4()),
@@ -85,9 +75,9 @@ async def main():
 
                 # Send response to Redis stream (response_channel)
                 await producer.add_to_stream(
-                {token: response_text},  # <-- send plain string, not JSON string
-                "response_channel" )
-
+                    {token: json.dumps(bot_entry.model_dump())},
+                    "response_channel"
+                )
 
                 # Add bot message to chat history
                 await cache.add_message_to_cache(
